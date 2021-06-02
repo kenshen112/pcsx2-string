@@ -1,9 +1,5 @@
-#ifdef _WIN32 
-#include <Windows.h>
-#endif
-
 #include "Pcsx2String.h"
-#include <stringapiset.h>
+#include <codecvt>
 
 Pcsx2String::Pcsx2String()
 {
@@ -21,28 +17,16 @@ Pcsx2String::Pcsx2String(const char* str)
 // Non default
 Pcsx2String::Pcsx2String(const std::wstring& str)
 {
-	count = str.size();
-	char* temp = new char[count];
-	const wchar_t* wStr = str.c_str();
-	size_t len = (wcslen(wStr) + 1) * sizeof(wchar_t);
-	wcstombs_s(&count, temp, len, wStr, len);
-	if (temp != nullptr)
-	{
-		string = temp;
-	}
+	static std::wstring_convert< std::codecvt_utf8<wchar_t>, wchar_t > converter;
+	string = converter.to_bytes(str);
+	count = string.size();
 }
 
 Pcsx2String& Pcsx2String::operator=(const std::wstring& str)
 {
-	count = str.size();
-	char* temp = new char[count];
-	const wchar_t* wStr = str.c_str();
-	size_t len = (wcslen(wStr) + 1) * sizeof(wchar_t);
-	wcstombs_s(&count, temp, len, wStr, len);
-	if (temp != nullptr)
-	{
-		string = temp;
-	}
+	static std::wstring_convert< std::codecvt_utf8<wchar_t>, wchar_t > converter;
+	string = converter.to_bytes(str);
+	count = string.size();
 	return *this;
 }
 
@@ -53,21 +37,17 @@ Pcsx2String& Pcsx2String::operator=(const std::string& str)
 	return *this;
 }
 
+Pcsx2String::operator std::wstring()
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	return converter.from_bytes(string.c_str()).data();
+}
+
 std::wstring& Pcsx2String::operator=(const Pcsx2String& str)
 {
-	auto const size =
-		MultiByteToWideChar(CP_UTF8, 0, str.string.data(), str.string.size(), nullptr, 0);
-
-	std::wstring output(size, '\0');
-
-	if (size == 0 ||
-		size != MultiByteToWideChar(CP_UTF8, 0, str.string.data(), str.string.size(),
-			&output[0], output.size()))
-	{
-		output.clear();
-	}
-
-	return output;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+	std::wstring type = converter.from_bytes(str.string.c_str());
+	return type;
 }
 
 const char* Pcsx2String::data()

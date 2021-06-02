@@ -31,6 +31,8 @@ public:
 
 	const char* data();
 
+	operator std::wstring();
+
 	char operator[](int index)
 	{
 		return string.c_str()[index];
