@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Pcsx2String.h">
+    <ClInclude Include="..\include\PString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -23,7 +23,7 @@
     <ClCompile Include="..\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Pcsx2String.cpp">
+    <ClCompile Include="..\src\PString.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

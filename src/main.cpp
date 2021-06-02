@@ -1,13 +1,16 @@
 #include <iostream>
-#include "Pcsx2String.h"
+#include "PString.h"
 
 int main(int argc, char* argv)
 {
-	Pcsx2String string = "Hello there";
-	Pcsx2String wString(L"Wello There");
+	PString string = "Hello there";
+	PString wString(L"Wello There");
+	PString InString;
+	std::cin >> InString;
 	std::wstring toPrint = wString;
 	std::cout << string << std::endl;
 	std::cout << "A char: " << string[0] << std::endl;
 	std::wcout << toPrint << std::endl;
+	std::cout << InString << std::endl;
 	return 0;
 }
